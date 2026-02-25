@@ -2,7 +2,6 @@
 
 ## Decoding of Specifications
 
----
 
 ### Applicable Sets
 
