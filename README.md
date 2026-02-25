@@ -65,8 +65,8 @@
 **R,B,S,T,F ⊆ M**<br>
 **Interpret:** R, B, S, T, F are subsets of M<br>
 **Decode:**<br>
-    R can be any value in set M<br>
-    B can be any value in set M<br>
-    S can be any value in set M<br>
-    T can be any value in set M<br>
-    F can be any value in set F<br>
+* R can be any value in set M<br>
+* B can be any value in set M<br>
+* S can be any value in set M<br>
+* T can be any value in set M<br>
+* F can be any value in set M<br>
