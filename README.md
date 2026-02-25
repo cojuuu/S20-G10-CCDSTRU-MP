@@ -6,15 +6,14 @@
 
 ### Applicable Sets
 
-**C: {x ∈ Z+ | x < 4}** **Interpret:** Set C is a set of positive integers less than 4  
-**Decode:** C: {1, 2, 3}
+**C: {x ∈ Z+ | x < 4}**<br>
+**Interpret:** Set C is a set of positive integers less than 4<br>
+**Decode:** C: {1, 2, 3}<br>
 
----
 
 **N: {x ∈ Z+ ∪ {0} | x <= 16}** **Interpret:** Set N is a set of positive integers less than or equal to 16, including 0  
 **Decode:** N: {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}
 
----
 
 **M: C x C** **Interpret:** M is the Cartesian product of set C and set C  
 **Decode:**
@@ -25,6 +24,5 @@
 | (2, 1) | (2, 2) | (2, 3) |
 | (3, 1) | (3, 2) | (3, 3) |
 
----
 
 **V: {true, false}** **Interpret:** Set V is the set of truth values
