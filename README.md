@@ -2,6 +2,8 @@
 
 ## Decoding of Specifications
 
+---
+
 ### Applicable Sets
 
 **C: {x ∈ Z+ | x < 4}** **Interpret:** Set C is a set of positive integers less than 4  
@@ -15,7 +17,9 @@
 ---
 
 **M: C x C** **Interpret:** M is the Cartesian product of set C and set C  
-**Decode:** | | M | |
+**Decode:**
+
+| | M | |
 | :---: | :---: | :---: |
 | (1, 1) | (1, 2) | (1, 3) |
 | (2, 1) | (2, 2) | (2, 3) |
