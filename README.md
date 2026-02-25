@@ -78,7 +78,7 @@
 **Decode:**<br>
 
 
-**over <-> (|F| = 3 v val >= 20 v start ^ (|R| > 0 ^ |B| = 0 v |R| = 0 ^ |B| > 0))**<br>
+**over <-> (|F| = 3 ∨ val >= 20 ∨ start ∧ (|R| > 0 ∧ |B| = 0 ∨ |R| = 0 ∧ |B| > 0))**<br>
 **Interpret:**<br>
 **Decode:**<br>
 
@@ -95,3 +95,23 @@
 **T = ∅**<br>
 
 ### System States and Behavior
+
+#### Remove(*pos* ∈ M)
+
+***go* -> (R = R - {*pos*})**<br>
+**Interpret:**<br>
+**Decode:**<br>
+
+
+**¬*go* -> (B = B - {*pos*})**<br>
+**Interpret:**<br>
+**Decode:**<br>
+
+**S = S - {*pos*}**<br>
+**Interpret:**<br>
+**Decode:**<br>
+
+
+**T = T - {*pos*}**<br>
+**Interpret:**<br>
+**Decode:**<br>
