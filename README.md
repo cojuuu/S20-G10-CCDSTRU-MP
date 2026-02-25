@@ -70,3 +70,28 @@
 * S can be any value in set M<br>
 * T can be any value in set M<br>
 * F can be any value in set M<br>
+
+### System Facts
+
+**F = M − (R ∪ B)**<br>
+**Interpret:**<br>
+**Decode:**<br>
+
+
+**over <-> (|F| = 3 v val >= 20 v start ^ (|R| > 0 ^ |B| = 0 v |R| = 0 ^ |B| > 0))**<br>
+**Interpret:**<br>
+**Decode:**<br>
+
+### System Initialization
+
+***good* = false**<br>
+***go* = true**<br>
+***start* = true**<br>
+***found* = false**<br>
+***val* = 0**<br>
+**R = ∅**<br>
+**B = ∅**<br>
+**S = ∅**<br>
+**T = ∅**<br>
+
+### System States and Behavior
