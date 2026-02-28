@@ -73,12 +73,12 @@
 ### System Facts
 
 **F = M − (R ∪ B)**<br>
-**Interpret:**<br>
+**Interpret:** F is the difference of M to the union of R and B<br>
 **Decode:**<br>
 
 
 **over <-> (|F| = 3 ∨ val >= 20 ∨ start ∧ (|R| > 0 ∧ |B| = 0 ∨ |R| = 0 ∧ |B| > 0))**<br>
-**Interpret:**<br>
+**Interpret:** Over IF AND ONLY IF the cardinality of F is equal to 3 OR val is more than or equal to 20 OR NOT start AND (the cardinality of R is greater than 0 AND the cardinality of B is equal to 0 OR the cardinality of R is equal to 0 AND the cardinality of B is greater than 0)<br>
 **Decode:**<br>
 
 ### System Initialization
@@ -98,21 +98,21 @@
 #### Remove(*pos* ∈ M)
 
 ***go* -> (R = R - {*pos*})**<br>
-**Interpret:**<br>
+**Interpret:** *go* only if R is equal to the difference of R and *pos*<br>
 **Decode:**<br>
 
 
 **¬*go* -> (B = B - {*pos*})**<br>
-**Interpret:**<br>
+**Interpret:** don't *go* only if B is equal to the difference of B and *pos*<br>
 **Decode:**<br>
 
 **S = S - {*pos*}**<br>
-**Interpret:**<br>
+**Interpret:** S is equal to the difference of S and *pos*<br>
 **Decode:**<br>
 
 
 **T = T - {*pos*}**<br>
-**Interpret:**<br>
+**Interpret:** T is equal to the difference of T and *pos*<br>
 **Decode:**<br>
 
 #### Replace(*pos* ∈ M)
