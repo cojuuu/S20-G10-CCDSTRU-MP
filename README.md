@@ -114,3 +114,13 @@
 **T = T - {*pos*}**<br>
 **Interpret:**<br>
 **Decode:**<br>
+
+#### Replace(*pos* ∈ M)
+
+#### Expand(*pos* ∈ M)
+
+#### Update(*pos* ∈ M)
+
+#### NextPlayerMove(*pos* ∈ M)
+
+#### GameOver()
