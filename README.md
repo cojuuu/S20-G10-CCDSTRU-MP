@@ -119,35 +119,35 @@
 
 **found = false**<br>
 **Interpret:** Initialize found to false<br>
-**Decode:** found starts as false before checking *pos*<br><br>
+**Decode:** found starts as false before checking *pos*<br>
 
 **(go ∧ *pos* ∈ B) -> (B = B - {*pos*} ∧ found = true)**<br>
 **Interpret:** If it is Red’s turn and *pos* is in Blue, remove *pos* from B and set found true<br>
-**Decode:** Red captures Blue’s piece at *pos* and found becomes true<br><br>
+**Decode:** Red captures Blue’s piece at *pos* and found becomes true<br>
 
 **(go ∧ *pos* ∈ R) -> found = true**<br>
 **Interpret:** If it is Red’s turn and *pos* is already in R, set found true<br>
-**Decode:** Red selected an already-Red position at *pos* and found becomes true<br><br>
+**Decode:** Red selected an already-Red position at *pos* and found becomes true<br>
 
 **(go ∧ *pos* ∉ R) -> (R = R ∪ {*pos*})**<br>
 **Interpret:** If it is Red’s turn and *pos* is not in R, add *pos* to R<br>
-**Decode:** Red claims or places on *pos*<br><br>
+**Decode:** Red claims or places on *pos*<br>
 
 **(¬go ∧ *pos* ∈ R) -> (R = R - {*pos*} ∧ found = true)**<br>
 **Interpret:** If it is Blue’s turn and *pos* is in Red, remove *pos* from R and set found true<br>
-**Decode:** Blue captures Red’s piece at *pos* and found becomes true<br><br>
+**Decode:** Blue captures Red’s piece at *pos* and found becomes true<br>
 
 **(¬go ∧ *pos* ∈ B) -> found = true**<br>
 **Interpret:** If it is Blue’s turn and *pos* is already in B, set found true<br>
-**Decode:** Blue selected an already-Blue position at *pos* and found becomes true<br><br>
+**Decode:** Blue selected an already-Blue position at *pos* and found becomes true<br>
 
 **(¬go ∧ *pos* ∉ B) -> (B = B ∪ {*pos*})**<br>
 **Interpret:** If it is Blue’s turn and *pos* is not in B, add *pos* to B<br>
-**Decode:** Blue claims or places on *pos*<br><br>
+**Decode:** Blue claims or places on *pos*<br>
 
 **(found ∧ *pos* ∉ S) -> (S = S ∪ {*pos*} ∧ found = false)**<br>
 **Interpret:** If found is true and *pos* is not in S, add *pos* to S and reset found to false<br>
-**Decode:** First-time marking: *pos* becomes part of S and found is cleared<br><br>
+**Decode:** First-time marking: *pos* becomes part of S and found is cleared<br>
 
 **(found ∧ *pos* ∈ S ∧ *pos* ∉ T) -> (T = T ∪ {*pos*} ∧ Expand(*pos*))**<br>
 **Interpret:** If found is true and *pos* is already in S but not in T, add *pos* to T then expand<br>
@@ -155,9 +155,57 @@
 
 #### Expand(*pos* ∈ M)
 
+**(a, b) = *pos***<br>
+**Interpret:** Let a and b be the coordinates of *pos*<br>
+**Decode:** If *pos*=(2,3) then a=2 and b=3<br>
+
+**u, d, k, r ∈ M**<br>
+**Interpret:** u, d, k, r are positions in M and are neighbors of *pos*<br>
+**Decode:** These are the up, down, left, right positions if they stay inside the board<br>
+
+**u = (a - 1, b)**<br>
+**Interpret:** u is the position above *pos*<br>
+**Decode:** If *pos*=(2,3) then u=(1,3)<br>
+
+**d = (a + 1, b)**<br>
+**Interpret:** d is the position below *pos*<br>
+**Decode:** If *pos*=(2,3) then d=(3,3)<br>
+
+**k = (a, b - 1)**<br>
+**Interpret:** k is the position to the left of *pos*<br>
+**Decode:** If *pos*=(2,3) then k=(2,2)<br>
+
+**r = (a, b + 1)**<br>
+**Interpret:** r is the position to the right of *pos*<br>
+**Decode:** If *pos*=(2,3) then r=(2,4)<br>
+
+**Remove(*pos*)**<br>
+**Interpret:** Remove the piece at *pos* and also remove it from S and T<br>
+**Decode:** *pos* is deleted from the current player’s set and from S and T<br>
+
+**(go) -> Replace(u)**<br>
+**Interpret:** If it is Red’s turn, replace the up neighbor<br>
+**Decode:** Red expands upward<br>
+
+**(¬go) -> Replace(d)**<br>
+**Interpret:** If it is Blue’s turn, replace the down neighbor<br>
+**Decode:** Blue expands downward<br>
+
+**Replace(k)**<br>
+**Interpret:** Always replace the left neighbor<br>
+**Decode:** Expansion always affects the left side<br>
+
+**Replace(r)**<br>
+**Interpret:** Always replace the right neighbor<br>
+**Decode:** Expansion always affects the right side<br>
+
 #### Update(*pos* ∈ M)
 
+
+
 #### NextPlayerMove(*pos* ∈ M)
+
+
 
 #### GameOver()
 
