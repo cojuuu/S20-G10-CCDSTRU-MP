@@ -117,6 +117,42 @@
 
 #### Replace(*pos* ∈ M)
 
+**found = false**<br>
+**Interpret:** Initialize found to false<br>
+**Decode:** found starts as false before checking *pos*<br><br>
+
+**(go ∧ *pos* ∈ B) -> (B = B - {*pos*} ∧ found = true)**<br>
+**Interpret:** If it is Red’s turn and *pos* is in Blue, remove *pos* from B and set found true<br>
+**Decode:** Red captures Blue’s piece at *pos* and found becomes true<br><br>
+
+**(go ∧ *pos* ∈ R) -> found = true**<br>
+**Interpret:** If it is Red’s turn and *pos* is already in R, set found true<br>
+**Decode:** Red selected an already-Red position at *pos* and found becomes true<br><br>
+
+**(go ∧ *pos* ∉ R) -> (R = R ∪ {*pos*})**<br>
+**Interpret:** If it is Red’s turn and *pos* is not in R, add *pos* to R<br>
+**Decode:** Red claims or places on *pos*<br><br>
+
+**(¬go ∧ *pos* ∈ R) -> (R = R - {*pos*} ∧ found = true)**<br>
+**Interpret:** If it is Blue’s turn and *pos* is in Red, remove *pos* from R and set found true<br>
+**Decode:** Blue captures Red’s piece at *pos* and found becomes true<br><br>
+
+**(¬go ∧ *pos* ∈ B) -> found = true**<br>
+**Interpret:** If it is Blue’s turn and *pos* is already in B, set found true<br>
+**Decode:** Blue selected an already-Blue position at *pos* and found becomes true<br><br>
+
+**(¬go ∧ *pos* ∉ B) -> (B = B ∪ {*pos*})**<br>
+**Interpret:** If it is Blue’s turn and *pos* is not in B, add *pos* to B<br>
+**Decode:** Blue claims or places on *pos*<br><br>
+
+**(found ∧ *pos* ∉ S) -> (S = S ∪ {*pos*} ∧ found = false)**<br>
+**Interpret:** If found is true and *pos* is not in S, add *pos* to S and reset found to false<br>
+**Decode:** First-time marking: *pos* becomes part of S and found is cleared<br><br>
+
+**(found ∧ *pos* ∈ S ∧ *pos* ∉ T) -> (T = T ∪ {*pos*} ∧ Expand(*pos*))**<br>
+**Interpret:** If found is true and *pos* is already in S but not in T, add *pos* to T then expand<br>
+**Decode:** Second-stage trigger: *pos* becomes part of T and causes Expand(*pos*)<br>
+
 #### Expand(*pos* ∈ M)
 
 #### Update(*pos* ∈ M)
