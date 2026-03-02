@@ -74,12 +74,12 @@
 
 **F = M − (R ∪ B)**<br>
 **Interpret:** F is the difference of M to the union of R and B<br>
-**Decode:**<br>
+**Decode:** Coordinates not occupied by Red or Blue<br>
 
 
 **over <-> (|F| = 3 ∨ val >= 20 ∨ start ∧ (|R| > 0 ∧ |B| = 0 ∨ |R| = 0 ∧ |B| > 0))**<br>
 **Interpret:** Over IF AND ONLY IF the cardinality of F is equal to 3 OR val is more than or equal to 20 OR NOT start AND (the cardinality of R is greater than 0 AND the cardinality of B is equal to 0 OR the cardinality of R is equal to 0 AND the cardinality of B is greater than 0)<br>
-**Decode:**<br>
+**Decode:** The game is over if only 3 empty square remains, 20 moves have been made, or the game has started, and one player eliminated the other's pieces from the board.<br>
 
 ### System Initialization
 
