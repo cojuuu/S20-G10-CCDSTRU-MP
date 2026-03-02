@@ -98,22 +98,22 @@
 #### Remove(*pos* ∈ M)
 
 ***go* -> (R = R - {*pos*})**<br>
-**Interpret:** *go* only if R is equal to the difference of R and *pos*<br>
-**Decode:**<br>
+**Interpret:** If go is true, then the element pos is removed from Red<br>
+**Decode:** Red's piece is removed from the board<br>
 
 
 **¬*go* -> (B = B - {*pos*})**<br>
-**Interpret:** don't *go* only if B is equal to the difference of B and *pos*<br>
-**Decode:**<br>
+**Interpret:** If go is false, then the element pos is removed from Blue<br>
+**Decode:** Blue's piece is removed from the board<br>
 
 **S = S - {*pos*}**<br>
 **Interpret:** S is equal to the difference of S and *pos*<br>
-**Decode:**<br>
+**Decode:** Pos is removed from set S<br>
 
 
 **T = T - {*pos*}**<br>
 **Interpret:** T is equal to the difference of T and *pos*<br>
-**Decode:**<br>
+**Decode:** Pos is removed from set T<br>
 
 #### Replace(*pos* ∈ M)
 
