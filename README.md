@@ -201,11 +201,21 @@
 
 #### Update(*pos* ∈ M)
 
+**good = false**<br>
+**Interpret:** Set good to false at the start of Update<br>
+**Decode:** Assume the move is not yet good or valid<br>
 
+**(*pos* ∉ S) -> (S = S ∪ {*pos*} ∧ good = ¬good)**<br>
+**Interpret:** If *pos* is not in S, add it to S and flip good<br>
+**Decode:** If *pos* is new to S, it becomes marked and good becomes true<br><br>
+
+**(¬good ∧ *pos* ∈ S ∧ *pos* ∉ T) -> (T = T ∪ {*pos*} ∧ Expand(*pos*))**<br>
+**Interpret:** If good is still false and *pos* is in S but not in T, add it to T and expand<br>
+**Decode:** If *pos* was already in S, trigger expansion and mark it in T<br>
 
 #### NextPlayerMove(*pos* ∈ M)
 
-
+// working on it
 
 #### GameOver()
 
