@@ -210,6 +210,8 @@
 #### GameOver()
 
 ***result* ∈ {"R wins", "B wins", "draw"}**<br>
+**Interpret:** result must be one of the three possible outputs<br>
+**Decode:** Only these 3 strings are allowed<br>
 
 **(over ∧ |R| > |B|) -> result = "R wins"**<br>
 **Interpret:** If the game is over and the cardinality of R is greater than the cardinality of B, then the result is "R wins"<br>
