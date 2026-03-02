@@ -124,3 +124,17 @@
 #### NextPlayerMove(*pos* ∈ M)
 
 #### GameOver()
+
+***result* ∈ {"R wins", "B wins", "draw"}**<br>
+
+**(over ∧ |R| > |B|) -> result = "R wins"**<br>
+**Interpret:** If the game is over and the cardinality of R is greater than the cardinality of B, then the result is "R wins"<br>
+**Decode:** R wins if they have more elements than B<br>
+
+**(over ∧ |R| > |B|) -> result = "R wins"**<br>
+**Interpret:** If the game is over and the cardinality of R is less than the cardinality of B, then the result is "B wins"<br>
+**Decode:** B wins if they have more elements than R<br>
+
+**(over ∧ |R| = |B|) -> result = "draw"**<br>
+**Interpret:** If the game is over and the cardinality of R is equal to the cardinality of B, then the result is "draw"<br>
+**Decode:** If R and B have the same number of elements, then it is a draw<br>
