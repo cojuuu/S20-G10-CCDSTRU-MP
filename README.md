@@ -207,7 +207,7 @@
 
 **(*pos* ∉ S) -> (S = S ∪ {*pos*} ∧ good = ¬good)**<br>
 **Interpret:** If *pos* is not in S, add it to S and flip good<br>
-**Decode:** If *pos* is new to S, it becomes marked and good becomes true<br><br>
+**Decode:** If *pos* is new to S, it becomes marked and good becomes true<br>
 
 **(¬good ∧ *pos* ∈ S ∧ *pos* ∉ T) -> (T = T ∪ {*pos*} ∧ Expand(*pos*))**<br>
 **Interpret:** If good is still false and *pos* is in S but not in T, add it to T and expand<br>
