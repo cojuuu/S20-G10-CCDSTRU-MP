@@ -215,7 +215,25 @@
 
 #### NextPlayerMove(*pos* ∈ M)
 
-// working on it
+**(¬over ∧ start ∧ go) -> (R = R ∪ {*pos*} ∧ S = S ∪ {*pos*} ∧ good = true)**<br>
+**Interpret:** If not over, in start phase, and it is Red’s turn, add *pos* to R and S and set good true<br>
+**Decode:** Red places the first piece at *pos* and it is immediately marked in S<br>
+
+**(¬over ∧ start ∧ ¬go) -> (B = B ∪ {*pos*} ∧ S = S ∪ {*pos*} ∧ good = true)**<br>
+**Interpret:** If not over, in start phase, and it is Blue’s turn, add *pos* to B and S and set good true<br>
+**Decode:** Blue places the first piece at *pos* and it is immediately marked in S<br>
+
+**(¬over ∧ ¬start ∧ (go ∧ *pos* ∈ R ∨ ¬go ∧ *pos* ∈ B)) -> (Update(*pos*) ∧ good = true)**<br>
+**Interpret:** After start phase, if the current player chooses their own piece at *pos*, run Update(*pos*) and set good true<br>
+**Decode:** You can only select your own cell at *pos* and doing so triggers Update<br>
+
+**(start ∧ |R| = 1 ∧ |B| = 1) -> start = false**<br>
+**Interpret:** If both players have exactly one piece, end the start phase<br>
+**Decode:** After both initial placements, start becomes false<br>
+
+**(¬over ∧ good) -> (good = ¬good ∧ go = ¬go ∧ val = val + 1)**<br>
+**Interpret:** If the move is good and game is not over, flip good back, switch turns, and increment val<br>
+**Decode:** Successful move ends the turn and increases the move counter by 1<br>
 
 #### GameOver()
 
