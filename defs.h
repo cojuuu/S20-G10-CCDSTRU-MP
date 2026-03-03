@@ -24,23 +24,17 @@ typedef struct
 
 typedef struct
 {
-    Coordinates pieces[TOTAL_POSITION];
-    int totalPieces;
-} Player;
-
-typedef struct
-{
     Coordinates cords[TOTAL_POSITION];
     int cordsCount;
-} State;
+} CordsArr;
 
 typedef struct 
 {
     String3 grid[SIZE + 1][SIZE + 1];
 
-    State S;
-    State T;
-    State F;
+    CordsArr S;
+    CordsArr T;
+    CordsArr F;
 } Board;
 
 typedef struct 
@@ -51,8 +45,8 @@ typedef struct
 
     bool start, over, go, found, good;
 
-    Player R;
-    Player B;
+    CordsArr R;
+    CordsArr B;
 
     Coordinates pos;
 
@@ -70,7 +64,6 @@ void setUpGame(Game *g);
 void setUpBoard(Board *board);
 void displayBoard(Game g);
 void promptPlayerMove(Game *g);
-void addToPlayer(Player *currentPlayer, Coordinates pos);
-void updateState(State *dest, Coordinates pos, char mode);
+void modifyCoordinateArr(CordsArr *dest, Coordinates pos, char mode);
 void updateBoard(Game *g);
-bool cordsFound(Player currentPlayer, int x, int y);
+bool cordsFound(CordsArr arr, int x, int y);
