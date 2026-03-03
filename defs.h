@@ -61,7 +61,6 @@ void Update();
 void NextPlayerMove(Game *g);
 void GameOver(Game *g);
 void setUpGame(Game *g);
-void setUpBoard(Board *board);
 void displayBoard(Game g);
 void promptPlayerMove(Game *g);
 void modifyCoordinateArr(CordsArr *dest, Coordinates pos, char mode);

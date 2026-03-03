@@ -65,26 +65,15 @@ void setUpGame(Game *g)
     g->go = true;
     g->start = true;
 
-    setUpBoard(&g->board);
-}
-
-void setUpBoard(Board *board)
-{
-    for (int i = 0; i < SIZE + 1; i++)
-    {
-        for (int j = 0; j < SIZE + 1; j++)
-        {
-            strcpy(board->grid[i][j], "   ");
-        }
-    }
-
+    // Set up board
     for (int y = 1; y <= SIZE; y++)
     {
         for (int x = 1; x <= SIZE; x++)
         {
-            board->F.cords[board->F.cordsCount].x = x;
-            board->F.cords[board->F.cordsCount].y = y;
-            board->F.cordsCount++;
+            strcpy(g->board.grid[y][x], "   ");
+            g->board.F.cords[g->board.F.cordsCount].x = x;
+            g->board.F.cords[g->board.F.cordsCount].y = y;
+            g->board.F.cordsCount++;
          }
     }
 }
@@ -154,6 +143,8 @@ void modifyCoordinateArr(CordsArr *dest, Coordinates pos, char mode)
                 dest->cords[dest->cordsCount - 1].y = 0;
 
                 dest->cordsCount--;
+
+                i = dest->cordsCount;
             }
         }
     }
