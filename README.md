@@ -245,9 +245,9 @@
 **Interpret:** If the game is over and the cardinality of R is greater than the cardinality of B, then the result is "R wins"<br>
 **Decode:** R wins if they have more elements than B<br>
 
-**(over ∧ |R| > |B|) -> result = "R wins"**<br>
+**(over ∧ |R| < |B|) -> result = "B wins"**<br>
 **Interpret:** If the game is over and the cardinality of R is less than the cardinality of B, then the result is "B wins"<br>
-**Decode:** B wins if they have more elements than R<br>
+**Decode:** B wins if |B| is greater than |R|<br>
 
 **(over ∧ |R| = |B|) -> result = "draw"**<br>
 **Interpret:** If the game is over and the cardinality of R is equal to the cardinality of B, then the result is "draw"<br>
