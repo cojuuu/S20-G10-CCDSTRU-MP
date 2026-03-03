@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define SIZE 3
 #define TOTAL_POSITION (SIZE * SIZE)
@@ -54,8 +55,8 @@ typedef struct
 } Game;
 
 // Function Prototypes
-void Remove(Game *g);
-void Replace();
+void Remove(Game *g, Coordinates pos);
+void Replace(Game *g, Coordinates pos);
 void Expand(Game *g, Coordinates pos);
 void Update(Game *g);
 void NextPlayerMove(Game *g);
@@ -67,3 +68,6 @@ void modifyCoordinateArr(CordsArr *dest, Coordinates pos, char mode);
 void updateBoard(Game *g);
 bool cordsFound(CordsArr arr, int x, int y);
 void checkWin(Game *g);
+bool outOfBounds(Coordinates pos);
+void pauseScreen();
+void clearScreen();

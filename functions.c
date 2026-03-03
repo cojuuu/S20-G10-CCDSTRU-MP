@@ -9,11 +9,64 @@ void Remove(Game *g, Coordinates pos)
     
     modifyCoordinateArr(&g->board.S, pos, REMOVE);
     modifyCoordinateArr(&g->board.T, pos, REMOVE);
+
+    modifyCoordinateArr(&g->board.F, pos, ADD);
 }
 
 void Replace(Game *g, Coordinates pos)
 {
+    g->found = false;
 
+    if (g->go)
+    {
+        if (cordsFound(g->B, pos.x, pos.y))
+        {
+            modifyCoordinateArr(&g->R, pos, ADD);
+            modifyCoordinateArr(&g->B, pos, REMOVE);
+            g->found = true;
+        }
+        else if (cordsFound(g->R, pos.x, pos.y))
+        {
+            g->found = true;
+        }
+        else if (!cordsFound(g->R, pos.x, pos.y))
+        {
+            modifyCoordinateArr(&g->R, pos, ADD);
+            modifyCoordinateArr(&g->board.F, pos, REMOVE);
+        }
+    }
+    else if (!g->go)
+    {
+        if (cordsFound(g->R, pos.x, pos.y))
+        {
+            modifyCoordinateArr(&g->B, pos, ADD);
+            modifyCoordinateArr(&g->R, pos, REMOVE);
+            g->found = true;
+        }
+        else if (cordsFound(g->B, pos.x, pos.y))
+        {
+            g->found = true;
+        }
+        else if (!cordsFound(g->B, pos.x, pos.y))
+        {
+            modifyCoordinateArr(&g->B, pos, ADD);
+            modifyCoordinateArr(&g->board.F, pos, REMOVE);
+        }
+    }
+
+    if (g->found)
+    {
+        if (!cordsFound(g->board.S, pos.x, pos.y))
+        {
+            modifyCoordinateArr(&g->board.S, pos, ADD);
+            g->found = true;
+        }
+        else if (cordsFound(g->board.S, pos.x, pos.y) && !cordsFound(g->board.T, pos.x, pos.y))
+        {
+            modifyCoordinateArr(&g->board.T, pos, ADD);
+            Expand(g, pos);
+        }
+    }
 }
 
 void Expand(Game *g, Coordinates pos)
@@ -26,8 +79,8 @@ void Expand(Game *g, Coordinates pos)
     d.x = pos.x;
     d.y = pos.y + 1;
 
-    d.x = pos.x - 1;
-    d.y = pos.y;
+    k.x = pos.x - 1;
+    k.y = pos.y;
 
     r.x = pos.x + 1;
     r.y = pos.y;
@@ -43,7 +96,10 @@ void Expand(Game *g, Coordinates pos)
         Replace(g, k);
 
     if (!outOfBounds(r))
-        Replace(g, r);
+    {
+        Replace(g, r); 
+    }
+        
 }
 
 void Update(Game *g)
@@ -71,17 +127,21 @@ void NextPlayerMove(Game *g)
     {
         modifyCoordinateArr(&g->R, g->pos, ADD);
         modifyCoordinateArr(&g->board.S, g->pos, ADD);
+        modifyCoordinateArr(&g->board.F, g->pos, REMOVE);
     }
     else if (g->start && !g->go)
     {
         modifyCoordinateArr(&g->B, g->pos, ADD);
         modifyCoordinateArr(&g->board.S, g->pos, ADD);
+        modifyCoordinateArr(&g->board.F, g->pos, REMOVE);
     }
-    
+
     if (!g->start)
     {
-        printf("update!\n");
-        Update(g);
+        if (g->go && cordsFound(g->R, g->pos.x, g->pos.y))
+            Update(g);
+        else if (!g->go && cordsFound(g->B, g->pos.x, g->pos.y))
+            Update(g);
     }
 
     if (g->start && g->R.cordsCount == 1 && g->B.cordsCount == 1)
@@ -89,11 +149,11 @@ void NextPlayerMove(Game *g)
         g->start = false;
     }
 
-    modifyCoordinateArr(&g->board.F, g->pos, REMOVE);
-
+   
     g->go = !g->go;
-    g->good = false;
+    g->good = !g->good;
     g->val++;
+    
 }
 
 void GameOver(Game *g)
@@ -129,6 +189,7 @@ void setUpGame(Game *g)
 
 void displayBoard(Game g)
 {
+    printf("\n");
     printf("  1   2   3\n");
     printf("+---+---+---+\n");
 
@@ -239,8 +300,11 @@ bool cordsFound(CordsArr arr, int x, int y)
 
 void checkWin(Game *g)
 {
-    if ((g->board.F.cordsCount == 3 || g->val > 16 || !g->start) && 
-    ((g->R.cordsCount > 0 && g->B.cordsCount == 0) || (g->R.cordsCount == 0 && g->B.cordsCount > 0)))
+    if (g->board.F.cordsCount == 3 || g->val > 16)
+    {
+        g->over = true;
+    }
+    else if (g->over && ((g->R.cordsCount > 0 && g->B.cordsCount) == 0 || (g->R.cordsCount == 0 && g->B.cordsCount > 0)))
     {
         g->over = true;
     }
@@ -252,4 +316,21 @@ bool outOfBounds(Coordinates pos)
         return true;
     else
         return false;
+}
+
+void pauseScreen()
+{
+    getchar();
+    printf("Press Enter to continue...\n");
+    getchar();
+}
+
+void clearScreen()
+{
+#ifdef _WIN32
+    system("cls");
+#else
+    // Assume POSIX (Linux, macOS, etc.)
+    system("clear");
+#endif
 }
