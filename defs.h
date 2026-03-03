@@ -9,6 +9,9 @@
 #define STR6 7
 #define ADD 'a'
 #define REMOVE 'r'
+#define RED "\033[0;31m"
+#define BLUE "\033[0;34m"
+#define RESET "\033[0m"
 
 typedef char String3[STR3];
 typedef char String6[STR6];
@@ -70,3 +73,4 @@ void promptPlayerMove(Game *g);
 void addToPlayer(Player *currentPlayer, Coordinates pos);
 void updateState(State *dest, Coordinates pos, char mode);
 void updateBoard(Game *g);
+bool cordsFound(Player currentPlayer, int x, int y);
