@@ -189,3 +189,49 @@ bool cordsFound(CordsArr arr, int x, int y)
 
     return foundCords;
 }
+
+int findIndex(CordsArr arr, Coordinates pos)
+{
+    int idx = -1;
+    bool found = false;
+
+    for (int i = 0; i < arr.cordsCount; i++)
+    {
+        if (!found && arr.cords[i].x == pos.x && arr.cords[i].y == pos.y)
+        {
+            idx = i;
+            found = true;
+        }
+    }
+
+    return idx;
+}
+
+void addUnique(CordsArr *arr, Coordinates pos)
+{
+    int idx = findIndex(*arr, pos);
+
+    if (idx == -1)
+    {
+        if (arr->cordsCount < TOTAL_POSITION)
+        {
+            arr->cords[arr->cordsCount] = pos;
+            arr->cordsCount++;
+        }
+    }
+}
+
+void removeIfPresent(CordsArr *arr, Coordinates pos)
+{
+    int idx = findIndex(*arr, pos);
+
+    if (idx != -1)
+    {
+        arr->cords[idx] = arr->cords[arr->cordsCount - 1];
+
+        arr->cords[arr->cordsCount - 1].x = 0;
+        arr->cords[arr->cordsCount - 1].y = 0;
+
+        arr->cordsCount--;
+    }
+}
