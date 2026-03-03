@@ -26,21 +26,21 @@ void NextPlayerMove(Game *g)
 
     if (g->start && g->go)
     {
-        addToPlayer(&g->R, g->pos);
-        updateState(&g->board.S, g->pos, ADD);
+        modifyCoordinateArr(&g->R, g->pos, ADD);
+        modifyCoordinateArr(&g->board.S, g->pos, ADD);
     }
     else if (g->start && !g->go)
     {
-        addToPlayer(&g->B, g->pos);
-        updateState(&g->board.S, g->pos, ADD);
+        modifyCoordinateArr(&g->B, g->pos, ADD);
+        modifyCoordinateArr(&g->board.S, g->pos, ADD);
     }
     
-    if (g->start && g->R.totalPieces == 1 && g->B.totalPieces == 1)
+    if (g->start && g->R.cordsCount == 1 && g->B.cordsCount == 1)
     {
         g->start = false;
     }
 
-    updateState(&g->board.F, g->pos, REMOVE);
+    modifyCoordinateArr(&g->board.F, g->pos, REMOVE);
 
     g->go = !g->go;
     g->good = false;
@@ -49,11 +49,11 @@ void NextPlayerMove(Game *g)
 
 void GameOver(Game *g)
 {
-    if (g->over && (g->R.totalPieces > g->B.totalPieces))
+    if (g->over && (g->R.cordsCount > g->B.cordsCount))
         strcpy(g->result, "R wins");
-    else if (g->over && (g->R.totalPieces < g->B.totalPieces))
+    else if (g->over && (g->R.cordsCount < g->B.cordsCount))
         strcpy(g->result, "B wins");
-    else if (g->over && (g->R.totalPieces == g->B.totalPieces))
+    else if (g->over && (g->R.cordsCount == g->B.cordsCount))
         strcpy(g->result, "draw");
 }
 
@@ -134,13 +134,7 @@ void promptPlayerMove(Game *g)
     } while (!g->good);
 }
 
-void addToPlayer(Player *currentPlayer, Coordinates pos)
-{
-    currentPlayer->pieces[currentPlayer->totalPieces] = pos;
-    currentPlayer->totalPieces++;
-}
-
-void updateState(State *dest, Coordinates pos, char mode)
+void modifyCoordinateArr(CordsArr *dest, Coordinates pos, char mode)
 {
     if (mode == ADD)
     {
@@ -153,11 +147,11 @@ void updateState(State *dest, Coordinates pos, char mode)
         {
             if (dest->cords[i].x == pos.x && dest->cords[i].y == pos.y)
             {
-                dest->cords[i].x = dest->cords[dest->cordsCount].x;
-                dest->cords[i].y = dest->cords[dest->cordsCount].y;
+                dest->cords[i].x = dest->cords[dest->cordsCount - 1].x;
+                dest->cords[i].y = dest->cords[dest->cordsCount - 1].y;
 
-                dest->cords[dest->cordsCount].x = 0;
-                dest->cords[dest->cordsCount].y = 0;
+                dest->cords[dest->cordsCount - 1].x = 0;
+                dest->cords[dest->cordsCount - 1].y = 0;
 
                 dest->cordsCount--;
             }
@@ -170,26 +164,26 @@ void updateBoard(Game *g)
     for (int i = 0; i < g->board.F.cordsCount; i++)
         strcpy(g->board.grid[g->board.F.cords[i].y][g->board.F.cords[i].x], "   ");
 
-    for (int i = 0; i < g->R.totalPieces; i++)
-        strcpy(g->board.grid[g->R.pieces[i].y][g->R.pieces[i].x], " O ");
+    for (int i = 0; i < g->R.cordsCount; i++)
+        strcpy(g->board.grid[g->R.cords[i].y][g->R.cords[i].x], " O ");
 
-    for (int i = 0; i < g->B.totalPieces; i++)
-        strcpy(g->board.grid[g->B.pieces[i].y][g->B.pieces[i].x], " O ");
+    for (int i = 0; i < g->B.cordsCount; i++)
+        strcpy(g->board.grid[g->B.cords[i].y][g->B.cords[i].x], " O ");
 
     for (int i = 0; i < g->board.S.cordsCount; i++)
         strcpy(g->board.grid[g->board.S.cords[i].y][g->board.S.cords[i].x], "[O]");
 }
 
-bool cordsFound(Player currentPlayer, int x, int y)
+bool cordsFound(CordsArr arr, int x, int y)
 {
     bool foundCords = false;
 
-    for (int i = 0; i < currentPlayer.totalPieces; i++)
+    for (int i = 0; i < arr.cordsCount; i++)
     {
-        if (currentPlayer.pieces[i].x == x && currentPlayer.pieces[i].y == y)
+        if (arr.cords[i].x == x && arr.cords[i].y == y)
         {
             foundCords = true;
-            i = currentPlayer.totalPieces;
+            i = arr.cordsCount;
         }
     }
 
