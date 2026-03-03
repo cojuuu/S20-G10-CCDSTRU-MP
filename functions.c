@@ -56,13 +56,30 @@ void setUpBoard(Board *board)
         }
     }
 
-    for (int x = 1; x <= SIZE; x++)
+    for (int y = 1; y <= SIZE; y++)
     {
-        for (int y = 1; y <= SIZE; y++)
+        for (int x = 1; x <= SIZE; x++)
         {
             board->F[board->fCount].x = x;
             board->F[board->fCount].y = y;
             board->fCount++;
          }
+    }
+}
+
+void displayBoard(Game g)
+{
+    printf("  1   2   3\n");
+    printf("+---+---+---+\n");
+
+    for (int y = 1; y <= SIZE; y++)
+    {
+        printf("|");
+        for (int x = 1; x <= SIZE; x++)
+        {
+            printf("%s|", g.board.grid[y][x]);
+        }
+        printf(" %d", y);
+        printf("\n+---+---+---+\n");
     }
 }

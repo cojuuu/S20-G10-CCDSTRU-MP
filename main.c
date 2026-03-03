@@ -6,6 +6,11 @@ int main()
 
     setUpGame(&g);
 
+    
+    displayBoard(g);
+
+    printf("%s\n", g.result);
+
     return 0;
 }
 

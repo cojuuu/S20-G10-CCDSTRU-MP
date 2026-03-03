@@ -62,3 +62,4 @@ void NextPlayerMove();
 void GameOver(Game *g);
 void setUpGame(Game *g);
 void setUpBoard(Board *board);
+void displayBoard(Game g);
