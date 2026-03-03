@@ -211,3 +211,12 @@ bool cordsFound(CordsArr arr, int x, int y)
 
     return foundCords;
 }
+
+void checkWin(Game *g)
+{
+    if ((g->board.F.cordsCount == 3 || g->val > 16 || !g->start) && 
+    ((g->R.cordsCount > 0 && g->B.cordsCount == 0) || (g->R.cordsCount == 0 && g->B.cordsCount > 0)))
+    {
+        g->over = true;
+    }
+}

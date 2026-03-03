@@ -66,3 +66,4 @@ void promptPlayerMove(Game *g);
 void modifyCoordinateArr(CordsArr *dest, Coordinates pos, char mode);
 void updateBoard(Game *g);
 bool cordsFound(CordsArr arr, int x, int y);
+void checkWin(Game *g);
