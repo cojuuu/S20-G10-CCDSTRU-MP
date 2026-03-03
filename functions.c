@@ -23,6 +23,28 @@ void Update()
 void NextPlayerMove(Game *g)
 {
     promptPlayerMove(g);
+
+    if (g->start && g->go)
+    {
+        addToPlayer(&g->R, g->pos);
+        updateState(&g->board.S, g->pos, ADD);
+    }
+    else if (g->start && !g->go)
+    {
+        addToPlayer(&g->B, g->pos);
+        updateState(&g->board.S, g->pos, ADD);
+    }
+    
+    if (g->start && g->R.totalPieces == 1 && g->B.totalPieces == 1)
+    {
+        g->start = false;
+    }
+
+    updateState(&g->board.F, g->pos, REMOVE);
+
+    g->go = !g->go;
+    g->good = false;
+    g->val++;
 }
 
 void GameOver(Game *g)
@@ -60,9 +82,9 @@ void setUpBoard(Board *board)
     {
         for (int x = 1; x <= SIZE; x++)
         {
-            board->F[board->fCount].x = x;
-            board->F[board->fCount].y = y;
-            board->fCount++;
+            board->F.cords[board->F.cordsCount].x = x;
+            board->F.cords[board->F.cordsCount].y = y;
+            board->F.cordsCount++;
          }
     }
 }
@@ -105,4 +127,50 @@ void promptPlayerMove(Game *g)
             g->good = true;
         }
     } while (!g->good);
+}
+
+void addToPlayer(Player *currentPlayer, Coordinates pos)
+{
+    currentPlayer->pieces[currentPlayer->totalPieces] = pos;
+    currentPlayer->totalPieces++;
+}
+
+void updateState(State *dest, Coordinates pos, char mode)
+{
+    if (mode == ADD)
+    {
+        dest->cords[dest->cordsCount] = pos;
+        dest->cordsCount++;
+    }
+    else if (mode == REMOVE)
+    {
+        for (int i = 0; i < dest->cordsCount; i++)
+        {
+            if (dest->cords[i].x == pos.x && dest->cords[i].y == pos.y)
+            {
+                dest->cords[i].x = dest->cords[dest->cordsCount].x;
+                dest->cords[i].y = dest->cords[dest->cordsCount].y;
+
+                dest->cords[dest->cordsCount].x = 0;
+                dest->cords[dest->cordsCount].y = 0;
+
+                dest->cordsCount--;
+            }
+        }
+    }
+}
+
+void updateBoard(Game *g)
+{
+    for (int i = 0; i < g->board.F.cordsCount; i++)
+        strcpy(g->board.grid[g->board.F.cords[i].y][g->board.F.cords[i].x], "   ");
+
+    for (int i = 0; i < g->R.totalPieces; i++)
+        strcpy(g->board.grid[g->R.pieces[i].y][g->R.pieces[i].x], " O ");
+
+    for (int i = 0; i < g->B.totalPieces; i++)
+        strcpy(g->board.grid[g->B.pieces[i].y][g->B.pieces[i].x], " O ");
+
+    for (int i = 0; i < g->board.S.cordsCount; i++)
+        strcpy(g->board.grid[g->board.S.cords[i].y][g->board.S.cords[i].x], "[O]");
 }

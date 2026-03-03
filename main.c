@@ -6,8 +6,12 @@ int main()
 
     setUpGame(&g);
 
-    displayBoard(g);
-    promptPlayerMove(&g);
+    do
+    {
+        displayBoard(g);
+        NextPlayerMove(&g);
+        updateBoard(&g);
+    } while (!g.over);
 
     return 0;
 }
