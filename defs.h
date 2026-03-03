@@ -7,6 +7,8 @@
 #define MAX_MOVES 16
 #define STR3 4
 #define STR6 7
+#define ADD 'a'
+#define REMOVE 'r'
 
 typedef char String3[STR3];
 typedef char String6[STR6];
@@ -23,18 +25,19 @@ typedef struct
     int totalPieces;
 } Player;
 
+typedef struct
+{
+    Coordinates cords[TOTAL_POSITION];
+    int cordsCount;
+} State;
+
 typedef struct 
 {
     String3 grid[SIZE + 1][SIZE + 1];
 
-    Coordinates S[TOTAL_POSITION];
-    int sCount;
-
-    Coordinates T[TOTAL_POSITION];
-    int tCount;
-
-    Coordinates F[TOTAL_POSITION];
-    int fCount;
+    State S;
+    State T;
+    State F;
 } Board;
 
 typedef struct 
@@ -43,7 +46,7 @@ typedef struct
 
     String6 result;
 
-    bool start, over, go, found;
+    bool start, over, go, found, good;
 
     Player R;
     Player B;
@@ -53,12 +56,17 @@ typedef struct
     Board board;
 } Game;
 
-// Function Prototype
+// Function Prototypes
 void Remove();
 void Replace();
 void Expand();
 void Update();
-void NextPlayerMove();
+void NextPlayerMove(Game *g);
 void GameOver(Game *g);
 void setUpGame(Game *g);
 void setUpBoard(Board *board);
+void displayBoard(Game g);
+void promptPlayerMove(Game *g);
+void addToPlayer(Player *currentPlayer, Coordinates pos);
+void updateState(State *dest, Coordinates pos, char mode);
+void updateBoard(Game *g);
