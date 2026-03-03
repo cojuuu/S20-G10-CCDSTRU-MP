@@ -1,24 +1,49 @@
 #include "defs.h"
 
-void Remove(Game *g)
+void Remove(Game *g, Coordinates pos)
 {
     if (g->go)
-        modifyCoordinateArr(&g->R, g->pos, REMOVE);
+        modifyCoordinateArr(&g->R, pos, REMOVE);
     else if (!g->go)
-        modifyCoordinateArr(&g->B, g->pos, REMOVE);
+        modifyCoordinateArr(&g->B, pos, REMOVE);
     
-    modifyCoordinateArr(&g->board.S, g->pos, REMOVE);
-    modifyCoordinateArr(&g->board.T, g->pos, REMOVE);
+    modifyCoordinateArr(&g->board.S, pos, REMOVE);
+    modifyCoordinateArr(&g->board.T, pos, REMOVE);
 }
 
-void Replace()
+void Replace(Game *g, Coordinates pos)
 {
 
 }
 
-void Expand()
+void Expand(Game *g, Coordinates pos)
 {
+    Coordinates u, d, k, r;
 
+    u.x = pos.x;
+    u.y = pos.y - 1;
+
+    d.x = pos.x;
+    d.y = pos.y + 1;
+
+    d.x = pos.x - 1;
+    d.y = pos.y;
+
+    r.x = pos.x + 1;
+    r.y = pos.y;
+
+    Remove(g, pos);
+
+    if (g->go && !outOfBounds(u))
+        Replace(g, u);
+    else if (!g->go && !outOfBounds(d))
+        Replace(g, d);
+
+    if (!outOfBounds(k))
+        Replace(g, k);
+
+    if (!outOfBounds(r))
+        Replace(g, r);
 }
 
 void Update(Game *g)
@@ -34,7 +59,7 @@ void Update(Game *g)
     if (!g->good && cordsFound(g->board.S, g->pos.x, g->pos.y) && !cordsFound(g->board.T, g->pos.x, g->pos.y))
     {
         modifyCoordinateArr(&g->board.T, g->pos, ADD);
-        Expand();
+        Expand(g, g->pos);
     }
 }
 
@@ -219,4 +244,12 @@ void checkWin(Game *g)
     {
         g->over = true;
     }
+}
+
+bool outOfBounds(Coordinates pos)
+{
+    if (pos.x == 0 || pos.y == 0 || pos.x == 4 || pos.y == 4)
+        return true;
+    else
+        return false;
 }

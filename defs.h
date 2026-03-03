@@ -56,7 +56,7 @@ typedef struct
 // Function Prototypes
 void Remove(Game *g);
 void Replace();
-void Expand();
+void Expand(Game *g, Coordinates pos);
 void Update(Game *g);
 void NextPlayerMove(Game *g);
 void GameOver(Game *g);
