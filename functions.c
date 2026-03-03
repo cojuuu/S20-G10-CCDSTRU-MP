@@ -1,8 +1,14 @@
 #include "defs.h"
 
-void Remove()
+void Remove(Game *g)
 {
-
+    if (g->go)
+        modifyCoordinateArr(&g->R, g->pos, REMOVE);
+    else if (!g->go)
+        modifyCoordinateArr(&g->B, g->pos, REMOVE);
+    
+    modifyCoordinateArr(&g->board.S, g->pos, REMOVE);
+    modifyCoordinateArr(&g->board.T, g->pos, REMOVE);
 }
 
 void Replace()
