@@ -54,7 +54,7 @@ typedef struct
 } Game;
 
 // Function Prototypes
-void Remove();
+void Remove(Game *g);
 void Replace();
 void Expand();
 void Update(Game *g);
