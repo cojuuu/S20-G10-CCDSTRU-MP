@@ -15,9 +15,21 @@ void Expand()
 
 }
 
-void Update()
+void Update(Game *g)
 {
+    g->good = false;
 
+    if (!cordsFound(g->board.S, g->pos.x, g->pos.y))
+    {
+        modifyCoordinateArr(&g->board.S, g->pos, ADD);
+        g->good = true;
+    }
+
+    if (!g->good && cordsFound(g->board.S, g->pos.x, g->pos.y) && !cordsFound(g->board.T, g->pos.x, g->pos.y))
+    {
+        modifyCoordinateArr(&g->board.T, g->pos, ADD);
+        Expand();
+    }
 }
 
 void NextPlayerMove(Game *g)
@@ -35,6 +47,12 @@ void NextPlayerMove(Game *g)
         modifyCoordinateArr(&g->board.S, g->pos, ADD);
     }
     
+    if (!g->start)
+    {
+        printf("update!\n");
+        Update(g);
+    }
+
     if (g->start && g->R.cordsCount == 1 && g->B.cordsCount == 1)
     {
         g->start = false;
@@ -105,6 +123,8 @@ void promptPlayerMove(Game *g)
     printf("\n");
     do
     {
+        g->good = true;
+
         if (g->go)
             printf("Player R, enter coordinates (x y): ");
         else if (!g->go)
@@ -115,10 +135,15 @@ void promptPlayerMove(Game *g)
         if (g->pos.x < 1 || g->pos.x > 3 || g->pos.y < 1 || g->pos.y > 3)
         {
             printf("Invalid coordinates!\n");
+            g->good = false;
         }
-        else
+        else if (!g->start)
         {
-            g->good = true;
+            if ((g->go && !cordsFound(g->R, g->pos.x, g->pos.y)) || (!g->go && !cordsFound(g->B, g->pos.x, g->pos.y)))
+            {
+                printf("Please choose your own piece!\n");
+                g->good = false;
+            }
         }
     } while (!g->good);
 }
