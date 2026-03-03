@@ -99,7 +99,12 @@ void displayBoard(Game g)
         printf("|");
         for (int x = 1; x <= SIZE; x++)
         {
-            printf("%s|", g.board.grid[y][x]);
+            if (cordsFound(g.R, x, y))
+                printf("%s", RED);
+            else if (cordsFound(g.B, x, y))
+                printf("%s", BLUE);
+
+            printf("%s%s|", g.board.grid[y][x], RESET);
         }
         printf(" %d", y);
         printf("\n+---+---+---+\n");
@@ -173,4 +178,20 @@ void updateBoard(Game *g)
 
     for (int i = 0; i < g->board.S.cordsCount; i++)
         strcpy(g->board.grid[g->board.S.cords[i].y][g->board.S.cords[i].x], "[O]");
+}
+
+bool cordsFound(Player currentPlayer, int x, int y)
+{
+    bool foundCords = false;
+
+    for (int i = 0; i < currentPlayer.totalPieces; i++)
+    {
+        if (currentPlayer.pieces[i].x == x && currentPlayer.pieces[i].y == y)
+        {
+            foundCords = true;
+            i = currentPlayer.totalPieces;
+        }
+    }
+
+    return foundCords;
 }
