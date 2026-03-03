@@ -54,14 +54,13 @@ typedef struct
 } Game;
 
 // Function Prototypes
-void Remove();
+void Remove(Game *g);
 void Replace();
 void Expand();
-void Update();
+void Update(Game *g);
 void NextPlayerMove(Game *g);
 void GameOver(Game *g);
 void setUpGame(Game *g);
-void setUpBoard(Board *board);
 void displayBoard(Game g);
 void promptPlayerMove(Game *g);
 void modifyCoordinateArr(CordsArr *dest, Coordinates pos, char mode);
