@@ -1,4 +1,4 @@
-#include "functions.c"
+#include "defs.h"
 
 int main()
 {
@@ -6,10 +6,8 @@ int main()
 
     setUpGame(&g);
 
-    
     displayBoard(g);
-
-    printf("%s\n", g.result);
+    promptPlayerMove(&g);
 
     return 0;
 }

@@ -43,7 +43,7 @@ typedef struct
 
     String6 result;
 
-    bool start, over, go, found;
+    bool start, over, go, found, good;
 
     Player R;
     Player B;
@@ -53,13 +53,14 @@ typedef struct
     Board board;
 } Game;
 
-// Function Prototype
+// Function Prototypes
 void Remove();
 void Replace();
 void Expand();
 void Update();
-void NextPlayerMove();
+void NextPlayerMove(Game *g);
 void GameOver(Game *g);
 void setUpGame(Game *g);
 void setUpBoard(Board *board);
 void displayBoard(Game g);
+void promptPlayerMove(Game *g);

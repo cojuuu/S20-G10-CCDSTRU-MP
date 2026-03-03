@@ -20,9 +20,9 @@ void Update()
 
 }
 
-void NextPlayerMove()
+void NextPlayerMove(Game *g)
 {
-
+    promptPlayerMove(g);
 }
 
 void GameOver(Game *g)
@@ -82,4 +82,23 @@ void displayBoard(Game g)
         printf(" %d", y);
         printf("\n+---+---+---+\n");
     }
+}
+
+void promptPlayerMove(Game *g)
+{
+    printf("\n");
+    do
+    {
+        if (g->go)
+            printf("Player R, enter coordinates (x y): ");
+        else if (!g->go)
+            printf("Player B, enter coordinates (x y): ");
+        
+        scanf("%d %d", &g->pos.x, &g->pos.y);
+
+        if (g->pos.x < 1 || g->pos.x > 3 || g->pos.y < 1 || g->pos.y > 3)
+        {
+            printf("Invalid coordinates!\n");
+        }
+    } while (!g->good);
 }
