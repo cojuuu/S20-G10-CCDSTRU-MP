@@ -57,7 +57,7 @@ typedef struct
 void Remove();
 void Replace();
 void Expand();
-void Update();
+void Update(Game *g);
 void NextPlayerMove(Game *g);
 void GameOver(Game *g);
 void setUpGame(Game *g);
