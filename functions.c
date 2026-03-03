@@ -100,5 +100,9 @@ void promptPlayerMove(Game *g)
         {
             printf("Invalid coordinates!\n");
         }
+        else
+        {
+            g->good = true;
+        }
     } while (!g->good);
 }
