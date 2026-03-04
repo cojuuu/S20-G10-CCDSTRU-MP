@@ -6,19 +6,22 @@ int main()
 
     setUpGame(&g);
 
-    updateBoard(&g);
-    computeOver(&g);
-
-    do
+    while (!g.over)
     {
+        clearScreen();
         displayBoard(g);
+
         NextPlayerMove(&g);
+
+        checkWin(&g);
         updateBoard(&g);
-        computeOver(&g);
-    } while (!g.over);
+    }
+
+    clearScreen();
+    displayBoard(g);
 
     GameOver(&g);
     printf("%s\n", g.result);
-    
+
     return 0;
 }
