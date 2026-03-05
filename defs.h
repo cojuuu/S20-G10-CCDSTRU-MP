@@ -54,20 +54,22 @@ typedef struct
     Board board;
 } Game;
 
-// Function Prototypes
+/* ---------- spec functions ---------- */
 void Remove(Game *g, Coordinates pos);
 void Replace(Game *g, Coordinates pos);
 void Expand(Game *g, Coordinates pos);
 void Update(Game *g);
 void NextPlayerMove(Game *g);
 void GameOver(Game *g);
+
+/* ---------- helper functions ---------- */
 void setUpGame(Game *g);
-void displayBoard(Game g);
 void promptPlayerMove(Game *g);
 void modifyCoordinateArr(CordsArr *dest, Coordinates pos, char mode);
-void updateBoard(Game *g);
-bool cordsFound(CordsArr arr, int x, int y);
-void checkWin(Game *g);
 bool outOfBounds(Coordinates pos);
-void pauseScreen();
+bool cordsFound(CordsArr arr, int x, int y);
+void updateBoard(Game *g);
+void checkWin(Game *g);
+void displayBoard(Game g);
 void clearScreen();
+void pauseScreen();
