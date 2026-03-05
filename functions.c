@@ -152,8 +152,6 @@ void modifyCoordinateArr(CordsArr *dest, Coordinates pos, char mode)
 
 void updateBoard(Game *g)
 {
-    rebuildF(g);
-    
     for (int i = 0; i < g->board.F.cordsCount; i++)
         strcpy(g->board.grid[g->board.F.cords[i].y][g->board.F.cords[i].x], "   ");
 
