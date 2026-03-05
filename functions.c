@@ -1,7 +1,26 @@
+/**
+ * Description     : Implements the game logic, board updates, input handling,
+ *                   and helper functions for the CCDSTRU machine project
+ * Author/s        : De Dios, Justin Marco ; Lamano, Kyle
+ * Section         : CCDSTRU S09
+ * Last Modified   : March 5, 2026
+ * Acknowledgments : We thank our professor, Mr. Emerico Aguilar, for
+ *                   the lessons and discussions in class, which helped
+ *                   us in completing this project.
+ */
+
 #include "defs.h"
 
 /* ---------- spec functions ---------- */
 
+/**
+ * Removes a position from the current player's set and from marker sets
+ * If the position is valid, it is removed from R or B depending on whose turn
+ * it is, and also removed from S and T
+ * @param g pointer to the current game state
+ * @param pos position to be removed
+ * @pre g is not NULL
+ */
 void Remove(Game *g, Coordinates pos)
 {
     if (!outOfBounds(pos))
@@ -17,6 +36,14 @@ void Remove(Game *g, Coordinates pos)
     }
 }
 
+/**
+ * Applies replacement logic on a target position based on the current player
+ * Can capture an opponent piece, place a new piece, update marker sets S/T,
+ * and trigger expansion when applicable
+ * @param g pointer to the current game state
+ * @param pos target position to process
+ * @pre g is not NULL
+ */
 void Replace(Game *g, Coordinates pos)
 {
     g->found = false;
@@ -76,6 +103,14 @@ void Replace(Game *g, Coordinates pos)
     }
 }
 
+/**
+ * Expands from a position by removing the center piece and applying Replace()
+ * to neighboring positions according to the current player's direction
+ * R expands upward + left + right, while B expands downward + left + right
+ * @param g pointer to the current game state
+ * @param pos center position to expand from
+ * @pre g is not NULL
+ */
 void Expand(Game *g, Coordinates pos)
 {
     Coordinates u, d, k, r;
@@ -106,6 +141,13 @@ void Expand(Game *g, Coordinates pos)
     }
 }
 
+/**
+ * Updates the currently selected position during the non-start phase
+ * Marks the position in S if not yet marked, or triggers expansion through T
+ * if it was already marked in S but not yet in T
+ * @param g pointer to the current game state (uses g->pos as selected position)
+ * @pre g is not NULL
+ */
 void Update(Game *g)
 {
     g->good = false;
@@ -123,6 +165,13 @@ void Update(Game *g)
     }
 }
 
+/**
+ * Processes one full player move/turn
+ * Handles input, start phase placement, non-start phase updates, start phase end
+ * condition, and turn switching with move count increment
+ * @param g pointer to the current game state
+ * @pre g is not NULL
+ */
 void NextPlayerMove(Game *g)
 {
     promptPlayerMove(g);
@@ -155,6 +204,12 @@ void NextPlayerMove(Game *g)
     g->val++;
 }
 
+/**
+ * Determines the final game result string when the game is over
+ * Compares the number of occupied positions of players R and B
+ * @param g pointer to the current game state
+ * @pre g is not NULL and g->over is true before calling
+ */
 void GameOver(Game *g)
 {
     if (g->over && (g->R.cordsCount > g->B.cordsCount))
@@ -167,6 +222,12 @@ void GameOver(Game *g)
 
 /* ---------- helper functions ---------- */
 
+/**
+ * Initializes the game state, flags, counters, board cells, and free positions
+ * Sets all members to default values and prepares the board for the first move
+ * @param g pointer to the current game state
+ * @pre g is not NULL
+ */
 void setUpGame(Game *g)
 {
     // Initializes everything in the game struct to 0/NULL/false
@@ -188,6 +249,13 @@ void setUpGame(Game *g)
     }
 }
 
+/**
+ * Prompts the current player to enter a coordinate and validates input
+ * Repeats until a valid in-bounds coordinate is entered and, after the start
+ * phase, ensures the selected position belongs to the current player
+ * @param g pointer to the current game state
+ * @pre g is not NULL
+ */
 void promptPlayerMove(Game *g)
 {
     do
@@ -218,6 +286,15 @@ void promptPlayerMove(Game *g)
     } while (!g->good);
 }
 
+/**
+ * Adds or removes a coordinate from a coordinate array based on the mode
+ * ADD appends a coordinate to the array, while REMOVE deletes a matching
+ * coordinate if found
+ * @param dest pointer to the destination coordinate array
+ * @param pos coordinate to add or remove
+ * @param mode operation mode (ADD or REMOVE)
+ * @pre dest is not NULL
+ */
 void modifyCoordinateArr(CordsArr *dest, Coordinates pos, char mode)
 {
     if (mode == ADD)
@@ -245,6 +322,11 @@ void modifyCoordinateArr(CordsArr *dest, Coordinates pos, char mode)
     }
 }
 
+/**
+ * Checks whether a coordinate is outside the valid board boundaries
+ * @param pos coordinate to check
+ * @return true if the coordinate is out of bounds, otherwise false
+ */
 bool outOfBounds(Coordinates pos)
 {
     if (pos.x < 1 || pos.x > SIZE || pos.y < 1 || pos.y > SIZE)
@@ -252,6 +334,13 @@ bool outOfBounds(Coordinates pos)
     return false;
 }
 
+/**
+ * Checks whether a coordinate exists in a coordinate array
+ * @param arr coordinate array to search
+ * @param x x-coordinate to find
+ * @param y y-coordinate to find
+ * @return true if the coordinate exists in arr, otherwise false
+ */
 bool cordsFound(CordsArr arr, int x, int y)
 {
     bool foundCords = false;
@@ -268,6 +357,13 @@ bool cordsFound(CordsArr arr, int x, int y)
     return foundCords;
 }
 
+/**
+ * Updates the printable board grid using the current contents of F, R, B, and S
+ * Free cells are cleared, player pieces are drawn, and marked cells in S are
+ * displayed with brackets
+ * @param g pointer to the current game state
+ * @pre g is not NULL
+ */
 void updateBoard(Game *g)
 {
     for (int i = 0; i < g->board.F.cordsCount; i++)
@@ -283,6 +379,13 @@ void updateBoard(Game *g)
         strcpy(g->board.grid[g->board.S.cords[i].y][g->board.S.cords[i].x], "[O]");
 }
 
+/**
+ * Checks whether any game-over condition has been met
+ * Sets g->over to true if the free-cell condition, move-limit condition, or
+ * elimination condition is satisfied
+ * @param g pointer to the current game state
+ * @pre g is not NULL and g->board.F is updated before calling
+ */
 void checkWin(Game *g)
 {
     if (g->board.F.cordsCount == 3 || 
@@ -294,6 +397,10 @@ void checkWin(Game *g)
     }
 }
 
+/**
+ * Displays the current board state with row/column labels and piece colors
+ * @param g current game state (passed by value for display only)
+ */
 void displayBoard(Game g)
 {
     printf("\n");
@@ -317,6 +424,10 @@ void displayBoard(Game g)
     }
 }
 
+/**
+ * Clears the console screen using the appropriate command for the platform
+ * Uses "cls" on Windows and "clear" on POSIX systems
+ */
 void clearScreen()
 {
 #ifdef _WIN32
@@ -327,6 +438,10 @@ void clearScreen()
 #endif
 }
 
+/**
+ * Pauses the program and waits for the user to press Enter before continuing
+ * Consumes the leftover newline from previous input, then waits again
+ */
 void pauseScreen()
 {
     getchar();

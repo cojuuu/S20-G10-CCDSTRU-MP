@@ -1,5 +1,11 @@
 #include "defs.h"
 
+/**
+ * Runs the main program loop for the game
+ * Initializes the game state, repeatedly processes player turns until the game
+ * ends, and prints the final result
+ * @return 0 if the program terminates successfully
+ */
 int main()
 {
     Game g;
