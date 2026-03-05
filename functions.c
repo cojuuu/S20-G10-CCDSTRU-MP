@@ -102,7 +102,7 @@ void Expand(Game *g, Coordinates pos)
         
 }
 
-void Update()
+void Update(Game *g)
 {
 
     if (!cordsFound(g->board.S, g->pos.x, g->pos.y))
