@@ -66,10 +66,3 @@ void promptPlayerMove(Game *g);
 void modifyCoordinateArr(CordsArr *dest, Coordinates pos, char mode);
 void updateBoard(Game *g);
 bool cordsFound(CordsArr arr, int x, int y);
-
-int findIndex(CordsArr arr, Coordinates pos);
-void addUnique(CordsArr *arr, Coordinates pos);
-void removeIfPresent(CordsArr *arr, Coordinates pos);
-
-void rebuildF(Game *g);
-void computeOver(Game *g);
