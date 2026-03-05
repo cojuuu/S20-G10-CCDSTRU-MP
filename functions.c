@@ -1,5 +1,73 @@
 #include "defs.h"
 
+bool outOfBounds(Coordinates pos)
+{
+    if (pos.x == 0 || pos.y == 0 || pos.x == 4 || pos.y == 4)
+        return true;
+    else
+        return false;
+}
+
+bool cordsFound(CordsArr arr, int x, int y)
+{
+    bool foundCords = false;
+
+    for (int i = 0; i < arr.cordsCount; i++)
+    {
+        if (arr.cords[i].x == x && arr.cords[i].y == y)
+        {
+            foundCords = true;
+            i = arr.cordsCount;
+        }
+    }
+
+    return foundCords;
+}
+
+void modifyCoordinateArr(CordsArr *dest, Coordinates pos, char mode)
+{
+    if (mode == ADD)
+    {
+        dest->cords[dest->cordsCount] = pos;
+        dest->cordsCount++;
+    }
+    else if (mode == REMOVE)
+    {
+        for (int i = 0; i < dest->cordsCount; i++)
+        {
+            if (dest->cords[i].x == pos.x && dest->cords[i].y == pos.y)
+            {
+                dest->cords[i].x = dest->cords[dest->cordsCount - 1].x;
+                dest->cords[i].y = dest->cords[dest->cordsCount - 1].y;
+
+                dest->cords[dest->cordsCount - 1].x = 0;
+                dest->cords[dest->cordsCount - 1].y = 0;
+
+                dest->cordsCount--;
+
+                i = dest->cordsCount;
+            }
+        }
+    }
+}
+
+void clearScreen()
+{
+#ifdef _WIN32
+    system("cls");
+#else
+    // Assume POSIX (Linux, macOS, etc.)
+    system("clear");
+#endif
+}
+
+void pauseScreen()
+{
+    getchar();
+    printf("Press Enter to continue...\n");
+    getchar();
+}
+
 void Remove(Game *g, Coordinates pos)
 {
     if (g->go)
@@ -119,6 +187,36 @@ void Update(Game *g)
     }
 }
 
+void promptPlayerMove(Game *g)
+{
+    printf("\n");
+    do
+    {
+        g->good = true;
+
+        if (g->go)
+            printf("Player R, enter coordinates (x y): ");
+        else if (!g->go)
+            printf("Player B, enter coordinates (x y): ");
+        
+        scanf("%d %d", &g->pos.x, &g->pos.y);
+
+        if (g->pos.x < 1 || g->pos.x > 3 || g->pos.y < 1 || g->pos.y > 3)
+        {
+            printf("Invalid coordinates!\n");
+            g->good = false;
+        }
+        else if (!g->start)
+        {
+            if ((g->go && !cordsFound(g->R, g->pos.x, g->pos.y)) || (!g->go && !cordsFound(g->B, g->pos.x, g->pos.y)))
+            {
+                printf("Please choose your own piece!\n");
+                g->good = false;
+            }
+        }
+    } while (!g->good);
+}
+
 void NextPlayerMove(Game *g)
 {
     promptPlayerMove(g);
@@ -166,25 +264,31 @@ void GameOver(Game *g)
         strcpy(g->result, "draw");
 }
 
-void setUpGame(Game *g)
+void checkWin(Game *g)
 {
-    // Initializes everything in the game struct to 0/NULL/false
-    memset(g, 0, sizeof(Game));
-
-    g->go = true;
-    g->start = true;
-
-    // Set up board
-    for (int y = 1; y <= SIZE; y++)
+    if (g->board.F.cordsCount == 3 || g->val > 16)
     {
-        for (int x = 1; x <= SIZE; x++)
-        {
-            strcpy(g->board.grid[y][x], "   ");
-            g->board.F.cords[g->board.F.cordsCount].x = x;
-            g->board.F.cords[g->board.F.cordsCount].y = y;
-            g->board.F.cordsCount++;
-         }
+        g->over = true;
     }
+    else if (g->over && ((g->R.cordsCount > 0 && g->B.cordsCount) == 0 || (g->R.cordsCount == 0 && g->B.cordsCount > 0)))
+    {
+        g->over = true;
+    }
+}
+
+void updateBoard(Game *g)
+{
+    for (int i = 0; i < g->board.F.cordsCount; i++)
+        strcpy(g->board.grid[g->board.F.cords[i].y][g->board.F.cords[i].x], "   ");
+
+    for (int i = 0; i < g->R.cordsCount; i++)
+        strcpy(g->board.grid[g->R.cords[i].y][g->R.cords[i].x], " O ");
+
+    for (int i = 0; i < g->B.cordsCount; i++)
+        strcpy(g->board.grid[g->B.cords[i].y][g->B.cords[i].x], " O ");
+
+    for (int i = 0; i < g->board.S.cordsCount; i++)
+        strcpy(g->board.grid[g->board.S.cords[i].y][g->board.S.cords[i].x], "[O]");
 }
 
 void displayBoard(Game g)
@@ -210,127 +314,23 @@ void displayBoard(Game g)
     }
 }
 
-void promptPlayerMove(Game *g)
+void setUpGame(Game *g)
 {
-    printf("\n");
-    do
+    // Initializes everything in the game struct to 0/NULL/false
+    memset(g, 0, sizeof(Game));
+
+    g->go = true;
+    g->start = true;
+
+    // Set up board
+    for (int y = 1; y <= SIZE; y++)
     {
-        g->good = true;
-
-        if (g->go)
-            printf("Player R, enter coordinates (x y): ");
-        else if (!g->go)
-            printf("Player B, enter coordinates (x y): ");
-        
-        scanf("%d %d", &g->pos.x, &g->pos.y);
-
-        if (g->pos.x < 1 || g->pos.x > 3 || g->pos.y < 1 || g->pos.y > 3)
+        for (int x = 1; x <= SIZE; x++)
         {
-            printf("Invalid coordinates!\n");
-            g->good = false;
-        }
-        else if (!g->start)
-        {
-            if ((g->go && !cordsFound(g->R, g->pos.x, g->pos.y)) || (!g->go && !cordsFound(g->B, g->pos.x, g->pos.y)))
-            {
-                printf("Please choose your own piece!\n");
-                g->good = false;
-            }
-        }
-    } while (!g->good);
-}
-
-void modifyCoordinateArr(CordsArr *dest, Coordinates pos, char mode)
-{
-    if (mode == ADD)
-    {
-        dest->cords[dest->cordsCount] = pos;
-        dest->cordsCount++;
+            strcpy(g->board.grid[y][x], "   ");
+            g->board.F.cords[g->board.F.cordsCount].x = x;
+            g->board.F.cords[g->board.F.cordsCount].y = y;
+            g->board.F.cordsCount++;
+         }
     }
-    else if (mode == REMOVE)
-    {
-        for (int i = 0; i < dest->cordsCount; i++)
-        {
-            if (dest->cords[i].x == pos.x && dest->cords[i].y == pos.y)
-            {
-                dest->cords[i].x = dest->cords[dest->cordsCount - 1].x;
-                dest->cords[i].y = dest->cords[dest->cordsCount - 1].y;
-
-                dest->cords[dest->cordsCount - 1].x = 0;
-                dest->cords[dest->cordsCount - 1].y = 0;
-
-                dest->cordsCount--;
-
-                i = dest->cordsCount;
-            }
-        }
-    }
-}
-
-void updateBoard(Game *g)
-{
-    for (int i = 0; i < g->board.F.cordsCount; i++)
-        strcpy(g->board.grid[g->board.F.cords[i].y][g->board.F.cords[i].x], "   ");
-
-    for (int i = 0; i < g->R.cordsCount; i++)
-        strcpy(g->board.grid[g->R.cords[i].y][g->R.cords[i].x], " O ");
-
-    for (int i = 0; i < g->B.cordsCount; i++)
-        strcpy(g->board.grid[g->B.cords[i].y][g->B.cords[i].x], " O ");
-
-    for (int i = 0; i < g->board.S.cordsCount; i++)
-        strcpy(g->board.grid[g->board.S.cords[i].y][g->board.S.cords[i].x], "[O]");
-}
-
-bool cordsFound(CordsArr arr, int x, int y)
-{
-    bool foundCords = false;
-
-    for (int i = 0; i < arr.cordsCount; i++)
-    {
-        if (arr.cords[i].x == x && arr.cords[i].y == y)
-        {
-            foundCords = true;
-            i = arr.cordsCount;
-        }
-    }
-
-    return foundCords;
-}
-
-void checkWin(Game *g)
-{
-    if (g->board.F.cordsCount == 3 || g->val > 16)
-    {
-        g->over = true;
-    }
-    else if (g->over && ((g->R.cordsCount > 0 && g->B.cordsCount) == 0 || (g->R.cordsCount == 0 && g->B.cordsCount > 0)))
-    {
-        g->over = true;
-    }
-}
-
-bool outOfBounds(Coordinates pos)
-{
-    if (pos.x == 0 || pos.y == 0 || pos.x == 4 || pos.y == 4)
-        return true;
-    else
-        return false;
-}
-
-void pauseScreen()
-{
-    getchar();
-    printf("Press Enter to continue...\n");
-    getchar();
-}
-
-void clearScreen()
-{
-#ifdef _WIN32
-    system("cls");
-#else
-    // Assume POSIX (Linux, macOS, etc.)
-    system("clear");
-#endif
 }
